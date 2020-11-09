@@ -24,8 +24,10 @@ namespace Chat_Application
         {
             services.AddControllersWithViews();
             services.AddRazorPages();
+            services.AddSignalR();
         }
 
+        [Obsolete]
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())
@@ -45,12 +47,16 @@ namespace Chat_Application
             app.UseAuthentication();
             app.UseAuthorization();
 
-            app.UseEndpoints(endpoints =>
-            {
-                endpoints.MapControllerRoute(
-                    name: "default",
-                    pattern: "{controller=Home}/{action=Index}/{id?}");
-                endpoints.MapRazorPages();
+            // app.UseEndpoints(endpoints =>
+            // {
+            //     endpoints.MapControllerRoute(
+            //         name: "default",
+            //         pattern: "{controller=Home}/{action=Index}/{id?}");
+            //     endpoints.MapRazorPages();
+            // });
+
+            app.UseSignalR(config => {
+                config.MapHub<MessageHub>("/messages"); 
             });
         }
     }
