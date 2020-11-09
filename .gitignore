@@ -34,4 +34,5 @@
 # Folders
 bin/*
 obj/*
-*/.vscode/*
+.vscode/*
+.vs/*
