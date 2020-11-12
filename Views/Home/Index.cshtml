@@ -2,7 +2,185 @@
     ViewData["Title"] = "Home Page";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+@*  <h1>Hello World!!!!</h1>    *@
+
+<div class="container1">
+    <div class="row">
+        @*  Menu  *@
+        <nav class="menu">
+            <ul class="items">
+                @*  Home     *@
+                <li class="item">
+                    <i class="fa fa-home" aria-hidden="true"></i>
+                </li>
+
+                @*  User    *@
+                <li class="item">
+                    <i class="fa fa-user" aria-hidden="true"></i>
+                </li>
+
+                @*  Pencil    *@
+                <li class="item">
+                    <i class="fa fa-pencil" aria-hidden="true"></i>
+                </li>
+
+                @*  Active  *@
+                <li class="item item-active">
+                    <i class="fa fa-commenting" aria-hidden="true"></i>
+                </li>
+
+                @*  File    *@
+                <li class="item">
+                    <i class="fa fa-file" aria-hidden="true"></i>
+                </li>
+
+                @*  Settings    *@
+                <li class="item">
+                    <i class="fa fa-cog" aria-hidden="true"></i>
+                </li>
+            </ul>
+        </nav>
+
+        @*  Searchbar Box   *@
+        <section class="discussions">
+            @*  Searchbar Header    *@
+            <div class="discussion search">
+                <div class="searchbar">
+                    <i class="fa fa-search" aria-hidden="true"></i>
+                    <input type="text" placeholder="Search..."></input>
+                </div>
+            </div>
+
+            @*  Active Box  *@
+            <div class="discussion message-active">
+                @*  Photo   *@
+                <div class="photo" style="background-image: url(https://image.noelshack.com/fichiers/2017/38/2/1505775062-1505606859-portrait-1961529-960-720.jpg);">
+                    <div class="online"></div>
+                </div>
+                <div class="desc-contact">
+                    @*  Frnd Name   *@
+                    <p class="name">Megan Leib</p>
+                    @*  Last Msg    *@
+                    <p class="message">9 pm at the bar if possible 😳</p>
+                </div>
+                @*  Last Active Time or Last Msg Time To current time   *@
+                <div class="timer">12 sec</div>
+            </div>
+
+            <div class="discussion">
+                <div class="photo" style="background-image: url(http://e0.365dm.com/16/08/16-9/20/theirry-henry-sky-sports-pundit_3766131.jpg?20161212144602);">
+                    <div class="online"></div>
+                </div>
+                <div class="desc-contact">
+                    <p class="name">Dave Corlew</p>
+                    <p class="message">Let's meet for a coffee or something today ?</p>
+                </div>
+                <div class="timer">3 min</div>
+            </div>
+
+            <div class="discussion">
+                <div class="photo" style="background-image: url(https://tinyclipart.com/resource/man/man-5.jpg);">
+                </div>
+                <div class="desc-contact">
+                    <p class="name">Jerome Seiber</p>
+                    <p class="message">I've sent you the annual report</p>
+                </div>
+                <div class="timer">42 min</div>
+            </div>
+
+            <div class="discussion">
+                <div class="photo" style="background-image: url(http://thomasdaubenton.xyz/portfolio/images/photo.jpg);">
+                    <div class="online"></div>
+                </div>
+                <div class="desc-contact">
+                    <p class="name">Thomas Dbtn</p>
+                    <p class="message">See you tomorrow ! 🙂</p>
+                </div>
+                <div class="timer">2 hour</div>
+            </div>
+
+            <div class="discussion">
+                <div class="photo" style="background-image: url(http://www.boutique-uns.com/uns/185-home_01grid/polo-femme.jpg);">
+                </div>
+                <div class="desc-contact">
+                    <p class="name">Elsie Amador</p>
+                    <p class="message">What the f**k is going on ?</p>
+                </div>
+                <div class="timer">1 day</div>
+            </div>
+
+            <div class="discussion">
+                <div class="photo" style="background-image: url(https://images.pexels.com/photos/979602/pexels-photo-979602.jpeg?auto=compress&cs=tinysrgb&h=350);">
+                </div>
+                <div class="desc-contact">
+                    <p class="name">Billy Southard</p>
+                    <p class="message">Ahahah 😂</p>
+                </div>
+                <div class="timer">4 days</div>
+            </div>
+
+            <div class="discussion">
+                <div class="photo" style="background-image: url(http://static.jbcgroup.com/news/pictures/cc70ae498569ecc11eaeff09224d4ba5.jpg);">
+                    <div class="online"></div>
+                </div>
+                <div class="desc-contact">
+                    <p class="name">Paul Walker</p>
+                    <p class="message">You can't see me</p>
+                </div>
+                <div class="timer">1 week</div>
+            </div>
+        </section>
+
+        @*  Chat Box    *@
+        <section class="chat">
+            @*  Chat Header     *@
+            <div class="header-chat">
+                @*  User Icon   *@
+                <i class="icon fa fa-user-o" aria-hidden="true"></i>
+                @*  Frnd Name   *@
+                <p class="name">Megan Leib</p>
+                @*  --- Icon     *@
+                <i class="icon clickable fa fa-ellipsis-h right" aria-hidden="true"></i>
+            </div>
+
+            @*  Msg Box    *@
+            <div class="messages-chat">
+                <div class="message">
+                    <div class="photo" style="background-image: url(https://image.noelshack.com/fichiers/2017/38/2/1505775062-1505606859-portrait-1961529-960-720.jpg);">
+                        <div class="online"></div>
+                    </div>
+                    <p class="text"> Hi, how are you ? </p>
+                </div>
+                <div class="message text-only">
+                    <p class="text"> What are you doing tonight ? Want to go take a drink ?</p>
+                </div>
+                <p class="time"> 14h58</p>
+                <div class="message text-only">
+                    <div class="response">
+                        <p class="text"> Hey Megan ! It's been a while 😃</p>
+                    </div>
+                </div>
+                <div class="message text-only">
+                    <div class="response">
+                        <p class="text"> When can we meet ?</p>
+                    </div>
+                </div>
+                <p class="response-time time"> 15h04</p>
+                <div class="message">
+                    <div class="photo" style="background-image: url(https://image.noelshack.com/fichiers/2017/38/2/1505775062-1505606859-portrait-1961529-960-720.jpg);">
+                        <div class="online"></div>
+                    </div>
+                    <p class="text"> 9 pm at the bar if possible 😳</p>
+                </div>
+                <p class="time"> 15h09</p>
+            </div>
+
+            @*Text Box*@
+            <div class="footer-chat">
+                <i class="icon fa fa-smile-o clickable" style="font-size:25pt;" aria-hidden="true"></i>
+                <input type="text" class="write-message" placeholder="Type your message here"></input>
+                <i class="icon send fa fa-paper-plane-o clickable" aria-hidden="true"></i>
+            </div>
+        </section>
+    </div>
 </div>

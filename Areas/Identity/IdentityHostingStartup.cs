@@ -20,11 +20,11 @@ namespace Chat_Application.Areas.Identity
                     options.UseSqlServer(
                         context.Configuration.GetConnectionString("Chat_ApplicationContextConnection")));
 
-                services.AddDefaultIdentity<Chat_ApplicationUser>(options =>
+                services.AddDefaultIdentity<Chat_ApplicationUser>(options => 
                 {
                     options.SignIn.RequireConfirmedAccount = false;
-                    options.Password.RequireLowercase = false;
                     options.Password.RequireUppercase = false;
+                    options.Password.RequireLowercase = false;
                 })
                     .AddEntityFrameworkStores<Chat_ApplicationContext>();
             });
