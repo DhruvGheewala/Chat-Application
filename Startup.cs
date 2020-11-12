@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Chat_Application.Hubs;
 
 namespace Chat_Application
 {
@@ -24,6 +25,8 @@ namespace Chat_Application
         {
             services.AddControllersWithViews();
             services.AddRazorPages();
+
+            services.AddSignalR();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -45,6 +48,12 @@ namespace Chat_Application
 
             app.UseAuthentication();
             app.UseAuthorization();
+
+            app.UseEndpoints(endpoints =>
+            {
+                endpoints.MapRazorPages();
+                endpoints.MapHub<ChatHub>("/chathub");
+            });
 
             app.UseEndpoints(endpoints =>
             {
