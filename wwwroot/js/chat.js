@@ -1,5 +1,7 @@
 "use strict";
 
+console.log('noob');
+
 // Connection Builder
 var connection = new signalR.HubConnectionBuilder().withUrl("/chatHub").build();
 
@@ -9,13 +11,17 @@ const buttons = ['btn-caller', 'btn-id', 'btn-all'];
 buttons.forEach(btn => {$('#' + btn).disabled = true;});
 
 // ##############################################################
-const user = prompt('Enter Your Name: ');
+//const user = prompt('Enter Your Name: ');
 let userInfo = [];
 let idToUser = {};
 let userToId = {};
 
 connection.on('UserConfig', (conId) => {
     // 
+});
+
+connection.on('fxn', (name) => {
+    console.log('name: ' + name);
 });
 
 // ##############################################################
