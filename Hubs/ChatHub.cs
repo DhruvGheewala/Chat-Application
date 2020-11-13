@@ -1,11 +1,24 @@
 using System;
 using Microsoft.AspNetCore.SignalR;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Identity;
+using Chat_Application.Areas.Identity.Data;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Chat_Application.Hubs
 {
     public class ChatHub : Hub
     {
+        //public object User { get; private set; }
+        private readonly SignInManager<Chat_ApplicationUser> _signInManager;
+        private readonly UserManager<Chat_ApplicationUser> _userManager;
+
+        public ChatHub(SignInManager<Chat_ApplicationUser> signInManager, UserManager<Chat_ApplicationUser> userManager)
+        {
+            _signInManager = signInManager;
+            _userManager = userManager;
+        }
+
         public Task SendMessageCaller(string from, string to, string message)
         {
             return Clients.Caller.SendAsync("RecieveMessageCaller", from, to, message);
@@ -23,8 +36,10 @@ namespace Chat_Application.Hubs
 
         public override async Task OnConnectedAsync()
         {
-            await Clients.Caller.SendAsync("UserConfig", Context.ConnectionId);
-            await Clients.All.SendAsync("UserConnected", Context.ConnectionId);
+            //if (_signInManager.IsSignedIn(User))
+            //    Console.WriteLine(_userManager.GetUserName(User));
+            //Clients.All.SendAsync("fxn");
+            //ViewBag.username = _userManager.GetUserName(HttpContext.User);
             await base.OnConnectedAsync();
         }
 
