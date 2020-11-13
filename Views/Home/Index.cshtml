@@ -1,5 +1,5 @@
 ﻿@{
-    ViewData["Title"] = "ChatApplication";
+    ViewData["Title"] = "Home Page";
 }
 
 <div class="container1">
@@ -53,35 +53,96 @@
 
             @* Active chat *@
             <div class="discussion message-active">
+<<<<<<< HEAD
                 @* Box Information *@
 
                 @* Photo *@
                 <div class="photo" style="background-image: url(https://image.noelshack.com/fichiers/2017/38/2/1505775062-1505606859-portrait-1961529-960-720.jpg);">
+=======
+                @*  Photo   *@
+                <div class="photo">
+>>>>>>> f5696f6918e88898912464eff040290f11290606
                     <div class="online"></div>
                 </div>
 
+<<<<<<< HEAD
                 <div class="desc-contect">
                     @* Name *@
                     <p class="name">Name Here</p>
                     @* Most recent msg *@
                     <p class="message">Last Mesage Here</p>
+=======
+            <div class="discussion">
+                <div class="photo">
+                    <div class="online"></div>
+                </div>
+                <div class="desc-contact">
+                    <p class="name">Dave Corlew</p>
+                    <p class="message">Let's meet for a coffee or something today ?</p>
+>>>>>>> f5696f6918e88898912464eff040290f11290606
                 </div>
 
+<<<<<<< HEAD
                 @* Last active time *@
                 <div class="timer">1 Hour ago</div>
+=======
+            <div class="discussion">
+                <div class="photo">
+                </div>
+                <div class="desc-contact">
+                    <p class="name">Jerome Seiber</p>
+                    <p class="message">I've sent you the annual report</p>
+                </div>
+                <div class="timer">42 min</div>
+>>>>>>> f5696f6918e88898912464eff040290f11290606
             </div>
 
             @* Other chats *@
             <div class="discussion">
+<<<<<<< HEAD
                 <div class="photo" style="background-image: url(http://e0.365dm.com/16/08/16-9/20/theirry-henry-sky-sports-pundit_3766131.jpg?20161212144602);">
+=======
+                <div class="photo">
+>>>>>>> f5696f6918e88898912464eff040290f11290606
                     <div class="online"></div>
                 </div>
 
+<<<<<<< HEAD
+=======
+            <div class="discussion">
+                <div class="photo">
+                </div>
+>>>>>>> f5696f6918e88898912464eff040290f11290606
                 <div class="desc-contact">
                     <p class="name">Mukesh</p>
                     <p class="message">Last msg</p>
                 </div>
+<<<<<<< HEAD
                 <div class="timer">3 min</div>
+=======
+                <div class="timer">1 day</div>
+            </div>
+
+            <div class="discussion">
+                <div class="photo">
+                </div>
+                <div class="desc-contact">
+                    <p class="name">Billy Southard</p>
+                    <p class="message">Ahahah 😂</p>
+                </div>
+                <div class="timer">4 days</div>
+            </div>
+
+            <div class="discussion">
+                <div class="photo">
+                    <div class="online"></div>
+                </div>
+                <div class="desc-contact">
+                    <p class="name">Paul Walker</p>
+                    <p class="message">You can't see me</p>
+                </div>
+                <div class="timer">1 week</div>
+>>>>>>> f5696f6918e88898912464eff040290f11290606
             </div>
         </section>
 
@@ -101,7 +162,7 @@
             <div class="messages-chat" id="msgs">
                 @* msg + profile + online status *@
                 <div class="message">
-                    <div class="photo" style="background-image: url(https://image.noelshack.com/fichiers/2017/38/2/1505775062-1505606859-portrait-1961529-960-720.jpg);">
+                    <div class="photo">
                         <div class="online"></div>
                     </div>
                     <p class="text"> Hi, how are you ? </p>
@@ -114,6 +175,27 @@
 
                 @* time *@
                 <p class="time"> 14h58</p>
+<<<<<<< HEAD
+=======
+                <div class="message text-only">
+                    <div class="response">
+                        <p class="text"> Hey Megan ! It's been a while 😃</p>
+                    </div>
+                </div>
+                <div class="message text-only">
+                    <div class="response">
+                        <p class="text"> When can we meet ?</p>
+                    </div>
+                </div>
+                <p class="response-time time"> 15h04</p>
+                <div class="message">
+                    <div class="photo">
+                        <div class="online"></div>
+                    </div>
+                    <p class="text"> 9 pm at the bar if possible 😳</p>
+                </div>
+                <p class="time"> 15h09</p>
+>>>>>>> f5696f6918e88898912464eff040290f11290606
             </div>
 
             @*Text Box*@
@@ -125,6 +207,8 @@
         </section>
     </div>
 </div>
+
+@*<br /><br /><h6>@ViewBag.username</h6>*@
 
 @* Client-Side SignalR Library *@
 <script src="~/js/signalr.js"></script>
