@@ -4,42 +4,34 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using Chat_Application.Areas.Identity.Data;
 using Microsoft.AspNetCore.Mvc;
+using System.Web;
 
 namespace Chat_Application.Hubs
 {
     public class ChatHub : Hub
     {
-        //public object User { get; private set; }
-        private readonly SignInManager<Chat_ApplicationUser> _signInManager;
-        private readonly UserManager<Chat_ApplicationUser> _userManager;
+        string name, conId;
 
-        public ChatHub(SignInManager<Chat_ApplicationUser> signInManager, UserManager<Chat_ApplicationUser> userManager)
+        private readonly SignInManager<Chat_ApplicationUser> signInManager;
+        private readonly UserManager<Chat_ApplicationUser> userManager;
+
+        public ChatHub(SignInManager<Chat_ApplicationUser> _signInManager, UserManager<Chat_ApplicationUser> _userManager)
         {
-            _signInManager = signInManager;
-            _userManager = userManager;
+            signInManager = _signInManager;
+            userManager = _userManager;
         }
 
-        public Task SendMessageCaller(string from, string to, string message)
+        public Task SendMessage(string sender, string _conId, string msg)
         {
-            return Clients.Caller.SendAsync("RecieveMessageCaller", from, to, message);
-        }
-
-        public Task SendMessageTo(string from, string to, string message)
-        {
-            return Clients.Client(to).SendAsync("RecieveMessageTo", from, to, message);
-        }
-
-        public Task SendMessageAll(string from, string to, string message)
-        {
-            return Clients.All.SendAsync("RecieveMessageAll", from, to, message);
+            return Clients.Client(_conId).SendAsync("ReceiveMessage", sender, msg);
         }
 
         public override async Task OnConnectedAsync()
         {
-            //if (_signInManager.IsSignedIn(User))
-            //    Console.WriteLine(_userManager.GetUserName(User));
-            //Clients.All.SendAsync("fxn");
-            //ViewBag.username = _userManager.GetUserName(HttpContext.User);
+            conId = Context.ConnectionId;
+
+            await Clients.Caller.SendAsync("UserConfig", name, conId);
+            await Clients.All.SendAsync("UserConnected", name, conId);
             await base.OnConnectedAsync();
         }
 
