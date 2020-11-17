@@ -1,101 +1,56 @@
 "use strict";
+let connection = new signalR.HubConnectionBuilder().withUrl('/chathub').build();
 
-console.log('noob');
-
-// Connection Builder
-var connection = new signalR.HubConnectionBuilder().withUrl("/chatHub").build();
-
-// ##############################################################
-const buttons = ['btn-caller', 'btn-id', 'btn-all'];
-// Disable send button until connection is established
-buttons.forEach(btn => {$('#' + btn).disabled = true;});
-
-// ##############################################################
-//const user = prompt('Enter Your Name: ');
+// ################# Initial #######################
+$('#btn-send').disabled = true;
+let uname, conId;
 let userInfo = [];
-let idToUser = {};
-let userToId = {};
 
-connection.on('UserConfig', (conId) => {
-    // 
-});
-
-connection.on('fxn', (name) => {
-    console.log('name: ' + name);
-});
-
-// ##############################################################
-// User Connected/Disconnected
-
-connection.on('UserConnected', (conId) => {
-    $('#online').append($('<option></option>')
-                .val(conId)
-                .text(idToUser[conId]));
-
-    // console.log('user:' + user);
-    // console.log('idToUser:' + idToUser);
-    // console.log('userToId:' + userToId);
-    // console.log('userInfo:' + userInfo);
-});
-
-connection.on('UserDisconnected', (conId) => {
-    $('#online').find('option[value=' + conId + ']').remove();
-});
-
-// ##############################################################
-// Event emitted *from Hubs*
-connection.on('RecieveMessageCaller', (from, to, msg) => {
-    msg = `Message From Caller: ${from} -> ${to}: ${msg}`;
-    $('#msgList').prepend($('<li></li>').text(msg));
-});
-
-connection.on('RecieveMessageTo', (from, to, msg) => {
-    msg = `Message From To: ${from} -> ${idToUser[to]}: ${msg}`;
-    $('#msgList').prepend($('<li></li>').text(msg));
-});
-
-connection.on('RecieveMessageAll', (from, to, msg) => {
-    msg = `Message From All: ${from} -> ${idToUser[to]}: ${msg}`;
-    $('#msgList').prepend($('<li></li>').text(msg));
-});
-
-// ##############################################################
-// when connection is established, you can see sendButton
-connection.start().then(() => {
-    buttons.forEach(btn => {$('#' + btn).disabled = false;})
-}).catch(err => {
-    return console.error(err.toString());
-});
-
-// ##############################################################
-// invoking event *to hubs*
-function invokeHub(invokeFxn, from, to, msg) {
-    connection.invoke(invokeFxn, from, to, msg).catch((err) => {
-        return console.error(err.toString());
-    });
+function concatJSON(json1, json2) {
+    for(var key in json2)
+        json1[key] = json2[key];
+    return json1;
 }
 
-$('#btn-caller').click(() => {
-    var invokeFxn = "SendMessageCaller";
-    var from = user;
-    var to = from;
-    var msg = $('#msg').val();
-    invokeHub(invokeFxn, from, to, msg);
+// ############## On Connection/Disconnection ########################
+connection.on('UserConfig', (_uname, _conId) => {
+    uname = _uname;
+    conId = _conId;
+
+    $('#uname').text(uname + ', ' + conId);
 });
 
-$('#btn-id').click(() => {
-    var invokeFxn = "SendMessageTo";
-    var from = $('#uname').val();
-    var to = $('#online').val();
-    var msg = $('#msg').val();
+connection.on('UserConnected', (_uname, _conId, json) => {
+    userInfo.push({ uname: _uname, conId: _conId });
 
-    invokeHub(invokeFxn, from, to, msg);
+    if(conId !== _conId)
+        $('#online').append($('<option></option>').val(_conId).text(_uname));
 });
 
-$('#btn-all').click(() => {
-    var invokeFxn = "SendMessageAll";
-    var from = $('#uname').val();
-    var to = 'Everyone';
-    var msg = $('#msg').val();
-    invokeHub(invokeFxn, from, to, msg);
+connection.on('UserDisconnected', (_conId) => {
+    userInfo.forEach(user => {
+        if(user['conId'] === _conId) {
+            userInfo.pop(user);
+            return;
+        }
+    });
+
+    $('#online').find('option[value=' + _conId + ']').remove();
 });
+
+// ################### To the Hubs #################################
+$('#btn-send').click(() => {
+    var receiver_conId = $('#online').val();
+    var msg = $('#msg').val();
+
+    connection.invoke('SendMessage', uname, receiver_conId, msg);
+});
+
+// ################# From the Hubs #########################
+connection.on('ReceiveMessage', (sender, msg) => {
+    msg = `${sender}: ${msg}`;
+    $('#msgList').prepend($('<li></li>').text(msg));
+});
+
+// ################ Connection Startup #############################
+connection.start().then(() => $('#btn-send').disabled = false).catch(err => console.error(err.toString()));
