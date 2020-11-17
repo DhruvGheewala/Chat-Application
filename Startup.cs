@@ -26,6 +26,7 @@ namespace Chat_Application
         {
             services.AddControllersWithViews();
             services.AddRazorPages();
+
             services.AddSignalR();
         }
 
@@ -62,6 +63,8 @@ namespace Chat_Application
                     pattern: "{controller=Home}/{action=Index}/{id?}");
                 endpoints.MapRazorPages();
             });
+
+            // localhost:5000/home/privacy
         }
     }
 }
