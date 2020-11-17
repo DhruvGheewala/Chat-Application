@@ -16,19 +16,21 @@ namespace Chat_Application.Controllers
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
-        //private readonly SignInManager<Chat_ApplicationUser> _signInManager;
-        //private readonly UserManager<Chat_ApplicationUser> _userManager;
+        
+        private readonly SignInManager<Chat_ApplicationUser> signInManager;
+        private readonly UserManager<Chat_ApplicationUser> userManager;
 
-        public HomeController(ILogger<HomeController> logger, SignInManager<Chat_ApplicationUser> signInManager, UserManager<Chat_ApplicationUser> userManager)
+        public HomeController(ILogger<HomeController> logger, SignInManager<Chat_ApplicationUser> _signInManager, UserManager<Chat_ApplicationUser> _userManager)
         {
             _logger = logger;
-            //_signInManager = signInManager;
-            //_userManager = userManager;
+            signInManager = _signInManager;
+            userManager = _userManager;
         }
 
         public IActionResult Index()
         {
-            //ViewBag.username = _userManager.GetUserName(HttpContext.User);
+            // ViewData
+            ViewBag.UserName = userManager.GetUserName(HttpContext.User);
             return View();
         }
 
