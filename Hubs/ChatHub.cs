@@ -2,36 +2,43 @@ using System;
 using Microsoft.AspNetCore.SignalR;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
-using Chat_Application.Areas.Identity.Data;
+using ChatApplication.Areas.Identity.Data;
 using Microsoft.AspNetCore.Mvc;
 using System.Web;
 
-namespace Chat_Application.Hubs
+namespace ChatApplication.Hubs
 {
     public class ChatHub : Hub
     {
-        string name, conId;
+        //private readonly SignInManager<Chat_ApplicationUser> signInManager;
+        //private readonly UserManager<Chat_ApplicationUser> userManager;
 
-        private readonly SignInManager<Chat_ApplicationUser> signInManager;
-        private readonly UserManager<Chat_ApplicationUser> userManager;
+        //public ChatHub(SignInManager<Chat_ApplicationUser> _signInManager, UserManager<Chat_ApplicationUser> _userManager)
+        //{
+        //    signInManager = _signInManager;
+        //    userManager = _userManager;
+        //}
 
-        public ChatHub(SignInManager<Chat_ApplicationUser> _signInManager, UserManager<Chat_ApplicationUser> _userManager)
+        public void ConfigureUser(string username)
         {
-            signInManager = _signInManager;
-            userManager = _userManager;
+            string conId = Context.ConnectionId;
+            //DB => username, conId
         }
 
-        public Task SendMessage(string sender, string _conId, string msg)
+        public Task SendMessage(string _conId, string from, string msg)
         {
-            return Clients.Client(_conId).SendAsync("ReceiveMessage", sender, msg);
+            return Clients.Client(_conId).SendAsync("ReceiveMessage", from, msg);
+        }
+
+        public Task RegisterUser(string email, string conId)
+        {
+            return Clients.Others.SendAsync("NewUserJoined", email, conId);
         }
 
         public override async Task OnConnectedAsync()
         {
-            conId = Context.ConnectionId;
-
-            await Clients.Caller.SendAsync("UserConfig", name, conId);
-            await Clients.All.SendAsync("UserConnected", name, conId);
+            string conId = Context.ConnectionId;
+            await Clients.Caller.SendAsync("SetConnectionId", conId);
             await base.OnConnectedAsync();
         }
 

@@ -5,33 +5,111 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using Chat_Application.Models;
+using ChatApplication.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
-using Chat_Application.Areas.Identity.Data;
+using ChatApplication.Areas.Identity.Data;
+using ChatApplication.Data;
+using Microsoft.EntityFrameworkCore;
 
-namespace Chat_Application.Controllers
+namespace ChatApplication.Controllers
 {
     [Authorize]
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
         
-        private readonly SignInManager<Chat_ApplicationUser> signInManager;
-        private readonly UserManager<Chat_ApplicationUser> userManager;
+        private readonly ChatApplicationContext _context;
+        private readonly UserManager<ChatApplicationUser> _userManager;
 
-        public HomeController(ILogger<HomeController> logger, SignInManager<Chat_ApplicationUser> _signInManager, UserManager<Chat_ApplicationUser> _userManager)
+        public HomeController(ILogger<HomeController> logger,
+            UserManager<ChatApplicationUser> userManager,
+            ChatApplicationContext context)
         {
             _logger = logger;
-            signInManager = _signInManager;
-            userManager = _userManager;
+            _context = context;
+            _userManager = userManager;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            // ViewData
-            ViewBag.UserName = userManager.GetUserName(HttpContext.User);
+            // Current User
+            var currentUser = await _userManager.GetUserAsync(User);
+
+            // All Users
+            var userData = _userManager.Users.Where(user => true);
+
+            // All Messages
+            var messageData = _context.Message.Where(msg => true);
+
+            foreach (var data in userData)
+            {
+                if (currentUser.ToString().ToLower() == data.ToString().ToLower())
+                {
+                    ViewBag.Email = data.UserName.ToString();
+                    ViewBag.Firstname = data.FirstName.ToString();  // Check This
+                    ViewBag.Lastname = data.LastName.ToString(); // Check This
+                    ViewBag.Name = ViewBag.Firstname + ViewBag.Lastname; // Check This
+                    break;
+                }
+            }
+
+            ViewBag.AllUsers = userData;
+            ViewBag.Messages = messageData;
             return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Index(Message message)
+        {
+            //inserting msg
+            message.UserName = User.Identity.Name;
+            var sender = await _userManager.GetUserAsync(User);
+            message.UserID = sender.Id;
+            await _context.Message.AddAsync(message);
+            await _context.SaveChangesAsync();
+
+            // Current User
+            var currentUser = await _userManager.GetUserAsync(User);
+            //var messages = await _context.Message.ToListAsync();
+
+            // All Users
+            var userData = _userManager.Users.Where(user => true);
+
+            // All Messages
+            var messageData = _context.Message.Where(msg => true);
+
+            foreach (var data in userData)
+            {
+                if (currentUser.ToString().ToLower() == data.ToString().ToLower())
+                {
+                    ViewBag.Email = data.UserName.ToString();
+                    ViewBag.Firstname = data.FirstName.ToString();  // Check This
+                    ViewBag.Lastname = data.LastName.ToString(); // Check This
+                    ViewBag.Name = ViewBag.Firstname + ViewBag.Lastname; // Check This
+                    break;
+                }
+            }
+
+            ViewBag.AllUsers = userData;
+            ViewBag.Messages = messageData;
+            return View();
+        }
+
+        public void Create(string reid, string msg, string uname)
+        {
+            Console.WriteLine(reid + " " + msg + " " + uname);
+
+            //string sender = _userManager.GetUserId(uname);
+            Message message = new Message(uname, msg, reid);
+
+            //await _context.Message.AddAsync(message);
+            //await _context.SaveChangesAsync();
+
+            _context.Message.Add(message);
+            _context.SaveChanges();
+
+            //return new EmptyResult();
         }
 
         public IActionResult Privacy()

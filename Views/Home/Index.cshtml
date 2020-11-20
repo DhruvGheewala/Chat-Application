@@ -1,51 +1,26 @@
-﻿@{
+﻿@model ChatApplication.Models.Message;
+@*@model IEnumerable<ChatApplication.Models.Message>*@
+
+@{
     ViewData["Title"] = "Home Page";
+    var userName = User.Identity.Name;
 }
 
-<div>
-    <select id="online">
-    </select>
-</div>
+<script type="text/javascript">
+    let messages = [];
+        function pushItem(sid, rid, msg) {
+            messages.push({sid, rid, msg});
+        }
 
-@ViewBag.UserName
+        @foreach(var data in ViewBag.Messages) {
+            @:pushItem('@data.UserName', '@data.Receiver', '@data.Text');
+        }
+</script>
 
-<div class="container1">
+<div id="userData" class="@ViewBag.Email @ViewBag.Firstname @ViewBag.Lastname @ViewBag.Name"></div>
+
+<div class="container1" style="height: 600px;">
     <div class="row">
-        @*  Menu  *@
-        <nav class="menu">
-            <ul class="items">
-                @*  Home     *@
-                <li class="item">
-                    <i class="fa fa-home" aria-hidden="true"></i>
-                </li>
-
-                @*  User    *@
-                <li class="item">
-                    <i class="fa fa-user" aria-hidden="true"></i>
-                </li>
-
-                @*  Pencil    *@
-                <li class="item">
-                    <i class="fa fa-pencil" aria-hidden="true"></i>
-                </li>
-
-                @*  Active  *@
-                <li class="item item-active">
-                    <i class="fa fa-commenting" aria-hidden="true"></i>
-                </li>
-
-                @*  File    *@
-                <li class="item">
-                    <i class="fa fa-file" aria-hidden="true"></i>
-                </li>
-
-                @*  Settings    *@
-                <li class="item">
-                    <i class="fa fa-cog" aria-hidden="true"></i>
-                </li>
-            </ul>
-        </nav>
-
         @*  Searchbar Box   *@
         <section class="discussions">
             @*  Searchbar Header    *@
@@ -57,87 +32,86 @@
             </div>
 
             @* Chats logs *@
+            @foreach (var user in ViewBag.AllUsers)
+            {
+                if (user.UserName.ToString().ToLower() == ViewBag.Email.ToString().ToLower())
+                    continue;
 
-            @* Active chat *@
-            <div class="discussion message-active">
-                @* Box Information *@
+                <div class="discussion" style="height: 90px; " id="@user.UserName">
+                    <div class="photo" style="background-image: none">
+                        <div class="online"></div>
+                    </div>
 
-                @* Photo *@
-                <div class="photo" style="background-image: url(https://image.noelshack.com/fichiers/2017/38/2/1505775062-1505606859-portrait-1961529-960-720.jpg);">
-                    <div class="online"></div>
+                    <div class="desc-contact">
+                        <p class="name">@user.FirstName @user.LastName</p>
+                        @* Fetch Last Message From user with email user.UserName *@
+                        <p class="message"></p>
+                    </div>
+
+                    @*<div class="timer">3 min</div>*@
                 </div>
-
-                <div class="desc-contect">
-                    @* Name *@
-                    <p class="name">Name Here</p>
-                    @* Most recent msg *@
-                    <p class="message">Last Mesage Here</p>
-                </div>
-
-                @* Last active time *@
-                <div class="timer">1 Hour ago</div>
-            </div>
-
-            @* Other chats *@
-            <div class="discussion">
-                <div class="photo" style="background-image: url(http://e0.365dm.com/16/08/16-9/20/theirry-henry-sky-sports-pundit_3766131.jpg?20161212144602);">
-                    <div class="online"></div>
-                </div>
-
-                <div class="desc-contact">
-                    <p class="name">Mukesh</p>
-                    <p class="message">Last msg</p>
-                </div>
-                <div class="timer">3 min</div>
-            </div>
+            }
         </section>
 
         @* Chat Box *@
-        <section class="chat" id="chatBox">
+        <section class="chat" id="chatBox" style="height: 600px">
             @* Chat Header *@
-            <div class="header-chat">
+            <div class="header-chat" style="width: 110%">
                 @* User Icon *@
                 <i class="icon fa fa-user-o" aria-hidden="true"></i>
                 @* Name *@
-                <p class="name">No one</p>
-                @* Icon *@
-                <i class="icon clickable fa fa-ellipsis-h right" aria-hidden="true"></i>
+                <p class="name" id="recieverName"></p>
             </div>
 
             @* Msg Box *@
-            <div class="messages-chat" id="msgs">
-                @* msg + profile + online status *@
-                <div class="message">
-                    <div class="photo">
-                        <div class="online"></div>
-                    </div>
-                    <p class="text"> Hi, how are you ? </p>
-                </div>
+            <div class="messages-chat" id="msgs" style="width: 110%; overflow: scroll;">
+                @*@foreach (var msg in ViewBag.Messages)
+                {
+                    Console.WriteLine("Reciever Id: " + @ViewBag.ReceiverID);
+                    if (userName == msg.UserName)
+                    {
+                        <div class="message">
+                            <div class="response">
+                                <p class="text"> @msg.Text </p>
+                            </div>
+                        </div>
+                    }
 
-                @* msg only *@
-                <div class="message text-only">
-                    <p class="text"> What are you doing tonight ? Want to go take a drink ?</p>
-                </div>
-
-                @* time *@
-                <p class="time"> 14h58</p>
+                    if (userName == msg.Receiver)
+                    {
+                        <div class="message">
+                            <p class="text"> @msg.Text </p>
+                        </div>
+                    }
+                }*@
             </div>
 
             @*Text Box*@
             <div class="footer-chat">
-                <i class="icon fa fa-smile-o clickable" style="font-size:25pt;" aria-hidden="true"></i>
-                <input type="text" class="write-message" placeholder="Type your message here" />
-                <i class="icon send fa fa-paper-plane-o clickable" aria-hidden="true" id="sendBtn"></i>
+                <input type="text" id="msg" class="write-message" />
+                <button id="myLink" class="icon send fa fa-paper-plane-o" href="./Home/Create">&nbsp; Send</button>
             </div>
         </section>
     </div>
 </div>
 
-@* Client-Side SignalR Library *@
-<script src="~/js/signalr.js"></script>
+@if (User.Identity.IsAuthenticated)
+{
+    @*<script>
+        var temporary = @ViewBag.Messages;
+        for (var msg of temporary)
+            console.log(msg);
+    </script>*@
+}
 
-@* JQuery *@
-<script src="~/js/jquery.js"></script>
+@section scripts {
+    @* Client-Side SignalR Library *@
+    <script src="~/js/signalr.js"></script>
 
-@* Script to handle messages *@
-<script src="~/js/chat.js"></script>
+    @* JQuery & Ajax*@
+    <script src="~/js/jquery.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+    @* Script to handle messages *@
+    <script src="~/js/chat.js"></script>
+}

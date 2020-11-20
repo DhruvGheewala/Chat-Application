@@ -1,6 +1,6 @@
 ﻿using System;
-using Chat_Application.Areas.Identity.Data;
-using Chat_Application.Data;
+using ChatApplication.Areas.Identity.Data;
+using ChatApplication.Data;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI;
@@ -8,25 +8,25 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
-[assembly: HostingStartup(typeof(Chat_Application.Areas.Identity.IdentityHostingStartup))]
-namespace Chat_Application.Areas.Identity
+[assembly: HostingStartup(typeof(ChatApplication.Areas.Identity.IdentityHostingStartup))]
+namespace ChatApplication.Areas.Identity
 {
     public class IdentityHostingStartup : IHostingStartup
     {
         public void Configure(IWebHostBuilder builder)
         {
             builder.ConfigureServices((context, services) => {
-                services.AddDbContext<Chat_ApplicationContext>(options =>
+                services.AddDbContext<ChatApplicationContext>(options =>
                     options.UseSqlServer(
-                        context.Configuration.GetConnectionString("Chat_ApplicationContextConnection")));
+                        context.Configuration.GetConnectionString("ChatApplicationContextConnection")));
 
-                services.AddDefaultIdentity<Chat_ApplicationUser>(options => 
+                services.AddDefaultIdentity<ChatApplicationUser>(options =>
                 {
                     options.SignIn.RequireConfirmedAccount = false;
                     options.Password.RequireUppercase = false;
                     options.Password.RequireLowercase = false;
                 })
-                    .AddEntityFrameworkStores<Chat_ApplicationContext>();
+                    .AddEntityFrameworkStores<ChatApplicationContext>();
             });
         }
     }

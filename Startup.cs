@@ -1,17 +1,16 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.SignalR;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Chat_Application.Hubs;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using ChatApplication.Hubs;
 
-namespace Chat_Application
+namespace ChatApplication
 {
     public class Startup
     {
@@ -26,16 +25,15 @@ namespace Chat_Application
         {
             services.AddControllersWithViews();
             services.AddRazorPages();
-
             services.AddSignalR();
         }
 
+        [Obsolete]
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
-                //app.UseDatabaseErrorPage();
             }
             else
             {
@@ -50,10 +48,9 @@ namespace Chat_Application
             app.UseAuthentication();
             app.UseAuthorization();
 
-            app.UseEndpoints(endpoints =>
+            app.UseSignalR(route =>
             {
-                endpoints.MapRazorPages();
-                endpoints.MapHub<ChatHub>("/chathub");
+                route.MapHub<ChatHub>("/Home/Index");
             });
 
             app.UseEndpoints(endpoints =>
@@ -63,8 +60,6 @@ namespace Chat_Application
                     pattern: "{controller=Home}/{action=Index}/{id?}");
                 endpoints.MapRazorPages();
             });
-
-            // localhost:5000/home/privacy
         }
     }
 }
